@@ -25,19 +25,21 @@ Extended routes:
   hide a pin in the full status list
 
 - `PUT` `/{pin_id}!`
-  show a pin in the full status list 
+  show a pin in the full status list
+
+  NB: use it to customize the webApp.
 
 
-## Web
+## webApp
 
-The Arduino boots on the DHCP. 
-If `#define MODE_PRO 1` is not set (by default), 
-open a bowser on `http://{ip}/$`. 
+The Arduino boots on the DHCP.
+If `#define MODE_PRO 1` is not set (by default),
+open a bowser on `http://{ip}/$`.
 
 
 ## USB
 
-If `#define MODE_PRO 1` is not set (by default), 
+If `#define MODE_PRO 1` is not set (by default),
 write anything and the read the help
 
 
@@ -51,3 +53,12 @@ write anything and the read the help
 ### hardware
 
 - Serial
+
+
+### tools
+
+#### custom HTML
+
+- edit ./web/html/index.html
+- export to ./sketch_WSlave/_webApp.h by `./web/html2h.h`
+- run `./web/docker-compose up` for testing

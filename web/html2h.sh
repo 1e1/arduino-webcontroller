@@ -4,26 +4,25 @@
 readonly BIN_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )
 readonly BASE_DIR=$( dirname $BIN_DIR)
 
-readonly INPUT_HTML="$BIN_DIR/html/_.html"
-readonly TEMP_GZ="$BIN_DIR/_.gz"
+readonly INPUT_HTML="$BIN_DIR/html/index.html"
+readonly TEMP_HTML="$BIN_DIR/html/_.html"
+readonly TEMP_GZ="$BIN_DIR/html/_.gz"
 readonly OUTPUT_H="$BASE_DIR/sketch_WSlave/_webApp.h"
 
 readonly SED_BACKUP_EXT=".sed"
 
 
-# remove
-# ^/s+
-# \s+$
-# \n+
-# replace '/all.txt' => '/$'
-
 echo "original HTML"
-ls -al $INPUT_HTML
-#sed -e ':a' -e 'N' -e '$!ba' -e 's/\n//g' $INPUT_HTML
-gzip -c -9 $INPUT_HTML > $TEMP_GZ
+ls -l $INPUT_HTML
+sed -E 's/^[[:space:]]*//;s/[[:space:]]*$//;s/\/all.txt/\/\$/' $INPUT_HTML \
+    | tr -d '\r\n' > $TEMP_HTML
 
-echo "compressed HTML"
-ls -al $TEMP_GZ
+echo "minify HTML"
+ls -l $TEMP_HTML
+gzip -c -9 $TEMP_HTML > $TEMP_GZ
+
+echo "compressed GZ"
+ls -l $TEMP_GZ
 
 echo "write .h"
 echo "" >  $OUTPUT_H
@@ -37,15 +36,16 @@ cat <<EOT >> $OUTPUT_H
 EOT
 
 hexdump -v -e '/1 "0x%02X, "' $TEMP_GZ >> $OUTPUT_H
-sed -i $SED_BACKUP_EXT '$s/, $/ \\/' $OUTPUT_H
+sed -i$SED_BACKUP_EXT '$s/, $/ \}/' $OUTPUT_H
 
 cat <<EOT >> $OUTPUT_H
-}
+
 #endif // webApp_H_
 EOT
 
 ########################################
-ls -al $OUTPUT_H
+ls -l $OUTPUT_H
 
 rm "$OUTPUT_H$SED_BACKUP_EXT"
 rm "$TEMP_GZ"
+# rm "$TEMP_HTML"

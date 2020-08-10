@@ -12,7 +12,7 @@
 
 Stream* Core::_currentStream;
 uint8_t Core::_outputValues[NUM_DIGITAL_PINS-NUM_ANALOG_INPUTS];
-volatile Core::option Core::_options[NUM_DIGITAL_PINS]; 
+volatile Core::option Core::_options[NUM_DIGITAL_PINS];
 
 char Core::_currentAction;
 uint8_t Core::_currentPin;
@@ -76,7 +76,7 @@ void Core::process()
     case ACTION_PUT:
         {
             const char nextChar = Core::_currentStream->read(); // jump the separator
-            
+
             if (PATH_SEPARATOR == nextChar) {
                 const uint8_t value = Core::_currentStream->parseInt(SKIP_NONE);
                 Core::_set(Core::_currentPin, value);
@@ -203,14 +203,14 @@ const int Core::_get(const uint8_t pin, const uint8_t mode, const bool isAnalog)
 }
 
 
- 
+
 void Core::_set(const uint8_t pin, const uint8_t value) {
     Core::_outputValues[pin] = value;
     analogWrite(pin, value);
 }
 
 
- 
+
 void Core::_unset(const uint8_t pin) {
     pinMode(pin, INPUT);
 }

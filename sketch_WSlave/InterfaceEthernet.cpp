@@ -40,7 +40,7 @@ void InterfaceEthernet::begin()
 void InterfaceEthernet::check()
 {
   EthernetClient client = this->_webServer->available();
-  
+
   Core::setStream(&client);
 
   if (client.connected()) {

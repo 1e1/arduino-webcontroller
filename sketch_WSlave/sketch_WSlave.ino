@@ -29,6 +29,10 @@
 
 
 
+#define MODE_SERIAL MODE_SERIAL_AUTO
+
+
+
 /** ===================== **/
 /**       observers       **/
 /** ===================== **/
@@ -56,13 +60,17 @@ static FastTimer* _timer;
 void setup()
 {
   BUSYLED_HIGH;
+  #if MODE_SERIAL != MODE_SERIAL_USB
   randomSeed(analogRead(0));
+  #endif
 
   const FastTimer::Precision p = FastTimer::Precision::P65s_4h;
   _timer = new FastTimer(p);
 
+  #if MODE_SERIAL != MODE_SERIAL_USB
   const uint8_t deviceNumber = random(2, 253);
   byte mac[] = MAC_ADDRESS(deviceNumber);
+  #endif
 
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -71,11 +79,17 @@ void setup()
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
 
+  #if MODE_SERIAL == MODE_SERIAL_AUTO
   if (1 == Ethernet.begin(mac, DHCP_TIMEOUT_MS)) {
     _engine = new InterfaceEthernet();
   } else {
     _engine = new InterfaceSerial();
   }
+  #elif MODE_SERIAL == MODE_SERIAL_ETHERNET
+  _engine = new InterfaceEthernet();
+  #else
+  _engine = new InterfaceSerial();
+  #endif
 
   BUSYLED_NONE;
 

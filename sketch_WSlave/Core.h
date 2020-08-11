@@ -16,8 +16,8 @@
 #define ACTION_DELETE       'D'
 #define PATH_SEPARATOR      '/'
 #define LF                  '\n'
-#define TEXT_INPUT          F(" INPUT ")
-#define TEXT_OUTPUT         F(" OUTPUT ")
+#define TEXT_INPUT          F(" IN ")
+#define TEXT_OUTPUT         F(" OUT ")
 #define CMD_HIDE            '.'
 #define CMD_ALL             '$'
 #define PREFIX_DIGITAL_PIN  'D'

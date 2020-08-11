@@ -1,17 +1,17 @@
 /*
  Rest Server
- 
+
  https://github.com/1e1/WSlave
- 
+
  Circuit at least one:
  * Ethernet shield
  * LCD shield
- 
+
  created 29 Aug 2012
  by Aymeric GERLIER
  modified 4 Sep 2012
  by Aymeric GERLIER
- 
+
  */
 
 

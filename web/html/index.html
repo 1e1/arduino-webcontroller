@@ -1,39 +1,36 @@
 <html>
 <head>
 <style>
-label {
-    width: 200px;
-    height: 64px;
-    padding: 1em;
-    background: linear-gradient(30deg, #A8E, #95D);
-    display: inline-block
+p{
+    width:255px;
+    padding:1em;
+    background:linear-gradient(200deg,#A8E,#95D);
+    display:inline-block
 }
 input{
-    width: 127px;
-    float: right
+    width:200px
 }
 </style>
 <script>
-    f = (a,u,w) => {
-        x = new XMLHttpRequest();
-        x.open(a,u);
-        x.onload = _ => {
-            200 == x.status && w(x.responseText)
+    f=(a,u,w)=>{
+        x=new XMLHttpRequest();
+        x.onload=_=>{
+            if(200==x.status)
+                w(x.responseText)
         };
+        x.open(a,u);
         x.send()
     }
-    u = _ => {
-        x = _.split(' ');
-        document.querySelector(`#${x[0]}`).value = x[2]
+    u=_=>{
+        x=_.split(' ');
+        document.getElementById(x[0]).setAttribute('value',x[2])
     }
-    w = _ => {
-        _.split('\n').forEach( _ => {
-            if (_) {
-                x = _.split(' ');
-                i = x[0][0] == 'D'
-                ? document.body.innerHTML+= `<label>${x[0]}<input id=${x[0]} type=checkbox ${x[2] > 127 ? 'checked' : ' ' } onchange="this.value=255*this.checked;f('${x[1][0] == 'I' ? 'GET' : 'PUT' }','/${x[0].substr(1)}/'+this.value,u)"></label>`
-                : document.body.innerHTML+= `<label>${x[0]}<input id=${x[0]} type=range min=0 step=2 max=255 value=${x[2]} onchange="f('${x[1][0] == 'I' ? 'GET' : 'PUT' }','/${x[0].substr(1)}/'+this.value,u)"></label>`
-                ;
+    w=_=>{
+        _.split('\n').forEach(_=>{
+            if(_){
+                x=_.split(' ');
+                document.body.innerHTML+=`<p>${x[0]} <input id=${x[0]} type=range min=0 max=255 onchange="f('${x[1][0]=='I'?'GET':'PUT'}','/${x[0].substr(1)}/'+this.value,u)">`;
+                u(_)
             }
         })
     }

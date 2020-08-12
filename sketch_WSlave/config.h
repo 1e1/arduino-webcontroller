@@ -4,14 +4,14 @@
 #include "macro.h"
 
 
-#define MODE_SERIAL     MODE_SERIAL_AUTO
-#define MODE_VERBOSE    MODE_VERBOSE_AUTO
+#define MODE_SERIAL             MODE_SERIAL_ALL
+#define MODE_VERBOSE            MODE_VERBOSE_AUTO
+#define PIN_VISIBILITY_DEFAULT  PIN_VISIBILITY_VISIBLE
 
 
 
 // a number between 1 and 254
-#define DEVICE_NUMBER       12
-#define DEVICE_NAME_PREFIX  "WSlave_"
+#define DEVICE_NUMBER   12
 
 // USB conf
 #define USB_SPEED       115200

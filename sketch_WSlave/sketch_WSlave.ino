@@ -47,8 +47,8 @@ void software_reset()
 
 
 
-static AbstractInterface* _engine;
 static FastTimer* _timer;
+static AbstractInterface* _engines[MODE_SERIAL_COUNT(MODE_SERIAL)];
 
 
 
@@ -56,17 +56,11 @@ static FastTimer* _timer;
 void setup()
 {
   BUSYLED_HIGH;
-  #if MODE_SERIAL & MODE_SERIAL_ETHERNET
-  randomSeed(analogRead(0));
-  #endif
+  DEBUG_START();
+  LOGLN(F("DEBUG ON"));
 
   const FastTimer::Precision p = FastTimer::Precision::P65s_4h;
   _timer = new FastTimer(p);
-
-  #if MODE_SERIAL & MODE_SERIAL_ETHERNET
-  const uint8_t deviceNumber = random(2, 253);
-  byte mac[] = MAC_ADDRESS(deviceNumber);
-  #endif
 
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -75,21 +69,30 @@ void setup()
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
 
-  #if MODE_SERIAL == MODE_SERIAL_AUTO
-  if (1 == Ethernet.begin(mac, DHCP_TIMEOUT_MS)) {
-    _engine = new InterfaceEthernet();
-  } else {
-    _engine = new InterfaceSerial();
-  }
-  #elif MODE_SERIAL == MODE_SERIAL_ETHERNET
-  _engine = new InterfaceEthernet();
-  #else
-  _engine = new InterfaceSerial();
+  uint8_t i = MODE_SERIAL_COUNT(MODE_SERIAL);
+
+  #if MODE_SERIAL & MODE_SERIAL_LCD
+  #endif
+
+  #if MODE_SERIAL & MODE_SERIAL_ETHERNET
+  randomSeed(analogRead(0));
+
+  const uint8_t deviceNumber = random(2, 253);
+  byte mac[] = MAC_ADDRESS(deviceNumber);
+
+  Ethernet.begin(mac, DHCP_TIMEOUT_MS);
+  LOGLN(Ethernet.localIP());
+
+  _engines[--i] = new InterfaceEthernet();
+  _engines[i]->begin();
+  #endif
+
+  #if MODE_SERIAL & MODE_SERIAL_USB
+  _engines[--i] = new InterfaceSerial();
+  _engines[i]->begin();
   #endif
 
   BUSYLED_NONE;
-
-  _engine->begin();
 }
 
 
@@ -97,22 +100,25 @@ void loop()
 {
   const bool isTick = _timer->update();
 
-  if (isTick) {
-    BUSYLED_WORK;
-    // broadcast
-    _engine->work();
+  uint8_t i = MODE_SERIAL_COUNT(MODE_SERIAL);
 
-    if (0 == _timer->getTime()) {
-      // maintain
-      _engine->idle();
+  while (i-->0) {
+    if (isTick) {
+      BUSYLED_WORK;
+      // broadcast
+      _engines[i]->raise();
+
+      if (0 == _timer->getTime()) {
+        // maintain
+        _engines[i]->reset();
+      }
     }
+
+    BUSYLED_IDLE;
+    _engines[i]->loop();
+
+    BUSYLED_NONE;
   }
-
-  BUSYLED_IDLE;
-  _engine->check();
-
-  BUSYLED_NONE;
-  _engine->clean();
 }
 
 

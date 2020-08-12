@@ -27,35 +27,30 @@ void InterfaceSerial::begin()
 }
 
 
-void InterfaceSerial::check()
+void InterfaceSerial::loop()
 {
-  Core::setStream(&Serial);
+  this->setStream(&Serial);
 
   if (Serial.available() > 0) {
-    if (Core::check()) {
-      Core::process();
+    if (this->read()) {
+      this->process();
     } else {
-      #if MODE_VERBOSE == MODE_VERBOSE_PRO
+      #if MODE_VERBOSE & MODE_VERBOSE_HELP
       Serial.println(TEXT_HELP);
       #endif
     }
 
-    Core::terminate();
+    this->terminate();
   }
 }
 
 
-void InterfaceSerial::work()
+void InterfaceSerial::raise()
 {
   // Serial.println(F("IDLE"));
 }
 
 
-void InterfaceSerial::idle()
-{
-}
-
-
-void InterfaceSerial::clean()
+void InterfaceSerial::reset()
 {
 }

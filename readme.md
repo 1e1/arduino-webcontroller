@@ -3,11 +3,16 @@
 A single controller connected by USB or Web.
 
 
+## Setup
+
+Edit `./sketch_WSlave/config.h`
+
+
 ## Commands
 
 Standard REST routes:
-- `GET` `/`
-  full status list of all pins
+- `GET` `/$`
+  full status list of all pins if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
 - `GET` `/{pin_id}`
   view a pin
@@ -22,37 +27,46 @@ Standard REST routes:
 
 Extended routes:
 - `PUT` `/{pin_id}.`
-  hide a pin in the full status list
+  hide a pin in the full status list if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
 - `PUT` `/{pin_id}!`
-  show a pin in the full status list
+  show a pin in the full status list if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
   NB: use it to customize the webApp.
 
 
 ## webApp
 
+`#define MODE_SERIAL MODE_SERIAL_ETHERNET` (or `MODE_SERIAL_ALL` by default)
+
 The Arduino boots on the DHCP.
-If `#define MODE_PRO 1` is not set (by default),
-open a bowser on `http://{ip}/$`.
+If `#define MODE_VERBOSE MODE_VERBOSE_WEBAPP` (or `MODE_VERBOSE_ALL` by default),
+open a bowser on `http://{ip}`.
 
 
 ## USB
 
-If `#define MODE_PRO 1` is not set (by default),
+`#define MODE_SERIAL MODE_SERIAL_USB` (or `MODE_SERIAL_ALL` by default)
+
+If `#define MODE_VERBOSE MODE_VERBOSE_HELP` (or `MODE_VERBOSE_ALL` by default),
 write anything and the read the help
+
+
+## LCD
+
+`#define MODE_SERIAL MODE_SERIAL_LCD` (or `MODE_SERIAL_ALL` by default)
+
+As the wiring is custom, you should read the code ;) 
+Define your wiring into `./sketch_WSlave/config.h`
 
 
 ## dependancies
 
 ### software
 
-- standard Ethernet.h
-
-
-### hardware
-
-- Serial
+- Ethernet.h
+- LiquidCrystal.h
+- standard Serial (Arduino.h)
 
 
 ### tools

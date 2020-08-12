@@ -6,11 +6,22 @@
 #include <Ethernet.h>
 #include "config.h"
 #include "macro.h"
-#include "AbstractInterface.h"
+#include "AbstractStream.h"
 #include "Core.h"
 #include "_webApp.h"
 
 
+
+#define ETH_SPI_D0_UNO    10
+#define ETH_SPI_D1_UNO    11
+#define ETH_SPI_D2_UNO    12
+#define ETH_SPI_D3_UNO    13
+#define ETH_SPI_D1_MEGA   50
+#define ETH_SPI_D2_MEGA   51
+#define ETH_SPI_D3_MEGA   52
+#define ETH_SPI_SS_MEGA   53
+#define ETH_SELECT_W5100  10
+#define ETH_SELECT_SD     4
 
 #define CRLF              "\r\n"
 #define HEADER_START      F("HTTP/1.0 200" CRLF "Content-Type: text/")
@@ -19,16 +30,15 @@
 
 
 
-class InterfaceEthernet : public AbstractInterface {
+class InterfaceEthernet : public AbstractStream {
 
   public:
   InterfaceEthernet();
 
   void begin(); // call it in setup()
-  void check(); // call it once in the main loop()
-  void work();
-  void idle();
-  void clean();
+  void loop();  // call it once in the main loop()
+  void raise();
+  void reset();
 
   protected:
   EthernetServer* _webServer;

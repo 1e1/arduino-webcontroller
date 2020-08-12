@@ -2,6 +2,15 @@
 #define macro_H_
 
 
+/* mode */
+#define MODE_SERIAL_USB         1
+#define MODE_SERIAL_ETHERNET    2
+#define MODE_SERIAL_LCD         4
+#define MODE_SERIAL_AUTO        MODE_SERIAL_USB + MODE_SERIAL_ETHERNET + MODE_SERIAL_LCD
+#define MODE_VERBOSE_PRO        0
+#define MODE_VERBOSE_AUTO       1
+
+
 /** HELP **/
 #define TEXT_HELP F("** HELP\n** ^(G|P|D) /(<pin>\\d+(/<value>\\d+)?)?\n")
 

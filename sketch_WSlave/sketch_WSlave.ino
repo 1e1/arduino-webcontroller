@@ -29,10 +29,6 @@
 
 
 
-#define MODE_SERIAL MODE_SERIAL_AUTO
-
-
-
 /** ===================== **/
 /**       observers       **/
 /** ===================== **/
@@ -60,14 +56,14 @@ static FastTimer* _timer;
 void setup()
 {
   BUSYLED_HIGH;
-  #if MODE_SERIAL != MODE_SERIAL_USB
+  #if MODE_SERIAL & MODE_SERIAL_ETHERNET
   randomSeed(analogRead(0));
   #endif
 
   const FastTimer::Precision p = FastTimer::Precision::P65s_4h;
   _timer = new FastTimer(p);
 
-  #if MODE_SERIAL != MODE_SERIAL_USB
+  #if MODE_SERIAL & MODE_SERIAL_ETHERNET
   const uint8_t deviceNumber = random(2, 253);
   byte mac[] = MAC_ADDRESS(deviceNumber);
   #endif

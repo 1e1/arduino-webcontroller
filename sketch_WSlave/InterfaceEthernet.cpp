@@ -46,7 +46,7 @@ void InterfaceEthernet::check()
   if (client.connected()) {
     if (client.available()) {
 
-      #if MODE_PRO
+      #if MODE_VERBOSE == MODE_VERBOSE_PRO
       if (Core::check()) {
         client.print(HEADER_START HEADER_END_ACTION);
         Core::process();

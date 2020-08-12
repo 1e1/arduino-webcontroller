@@ -35,7 +35,7 @@ void InterfaceSerial::check()
     if (Core::check()) {
       Core::process();
     } else {
-      #if MODE_PRO == 0
+      #if MODE_VERBOSE == MODE_VERBOSE_PRO
       Serial.println(TEXT_HELP);
       #endif
     }

@@ -4,10 +4,10 @@
 #include "macro.h"
 
 
-#define MODE_SERIAL_AUTO        0
-#define MODE_SERIAL_USB         1
-#define MODE_SERIAL_ETHERNET    2
-#define MODE_PRO 0
+#define MODE_SERIAL     MODE_SERIAL_AUTO
+#define MODE_VERBOSE    MODE_VERBOSE_AUTO
+
+
 
 // a number between 1 and 254
 #define DEVICE_NUMBER       12

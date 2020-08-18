@@ -2,16 +2,23 @@
 #define macro_H_
 
 
+/* mode */
+#define MODE_SERIAL_USB         1
+#define MODE_SERIAL_ETHERNET    2
+#define MODE_SERIAL_LCD         4
+#define MODE_SERIAL_ALL         MODE_SERIAL_USB + MODE_SERIAL_ETHERNET + MODE_SERIAL_LCD
+#define MODE_SERIAL_COUNT(m)    bool(m & MODE_SERIAL_USB) + bool(m & MODE_SERIAL_ETHERNET) + bool(m & MODE_SERIAL_LCD)
+#define MODE_VERBOSE_NONE       0
+#define MODE_VERBOSE_HELP       1
+#define MODE_VERBOSE_LIST       2
+#define MODE_VERBOSE_WEBAPP     4
+#define MODE_VERBOSE_ALL        MODE_VERBOSE_HELP + MODE_VERBOSE_LIST + MODE_VERBOSE_WEBAPP
+#define PIN_VISIBILITY_HIDDEN   0
+#define PIN_VISIBILITY_VISIBLE  1
+
+
 /** HELP **/
 #define TEXT_HELP F("** HELP\n** ^(G|P|D) /(<pin>\\d+(/<value>\\d+)?)?\n")
-
-
-/** SETUP ALIAS **/
-#define LCDCHAR(ch)                     static const uint8_t ch[] PROGMEM
-#define LONGBYTES(b)                    static const unsigned char b[] PROGMEM
-#define LONGBYTEN(b, n)                 static const unsigned char b[n] PROGMEM
-#define LONGSTRING(str)                 static const char str[] PROGMEM
-/** === **/
 
 
 #define DEBUG 0
@@ -19,7 +26,7 @@
 
 /** DEBUGGING TOOLS **/
 #if DEBUG
-  #define DEBUG_START() Serial.begin(9600)
+  #define DEBUG_START() Serial.begin(USB_SPEED)
   #define LOG(...)      Serial.print  (__VA_ARGS__)
   #define LOGLN(...)    Serial.println(__VA_ARGS__)
   #define WAIT(ms)      delay(ms)
@@ -29,6 +36,29 @@
   #define LOGLN(...)
   #define WAIT(ms)
 #endif
+/** === **/
+
+
+
+#ifdef LED_BUILTIN
+  #define BUSYLED_HIGH analogWrite(LED_BUILTIN, 255)
+  #define BUSYLED_WORK analogWrite(LED_BUILTIN, 63)
+  #define BUSYLED_IDLE analogWrite(LED_BUILTIN, 15)
+  #define BUSYLED_NONE analogWrite(LED_BUILTIN, 0)
+#else
+  #define BUSYLED_HIGH
+  #define BUSYLED_WORK
+  #define BUSYLED_IDLE
+  #define BUSYLED_NONE
+#endif
+
+
+
+/** SETUP ALIAS **/
+#define LCDCHAR(ch)                     static const uint8_t ch[] PROGMEM
+#define LONGBYTES(b)                    static const unsigned char b[] PROGMEM
+#define LONGBYTEN(b, n)                 static const unsigned char b[n] PROGMEM
+#define LONGSTRING(str)                 static const char str[] PROGMEM
 /** === **/
 
 

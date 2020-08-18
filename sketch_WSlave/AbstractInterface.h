@@ -7,10 +7,9 @@ class AbstractInterface {
   public:
   virtual void begin() {};
 
-  virtual void check() {};
-  virtual void work()  {};
-  virtual void idle()  {};
-  virtual void clean() {};
+  virtual void loop()  {};
+  virtual void raise() {};
+  virtual void reset() {};
 
 };
 

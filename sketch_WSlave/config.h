@@ -1,30 +1,54 @@
 #ifndef config_H_
 #define config_H_
 
+#include "Arduino.h"
 #include "macro.h"
 
 
-#define MODE_SERIAL_AUTO        0
-#define MODE_SERIAL_USB         1
-#define MODE_SERIAL_ETHERNET    2
-#define MODE_PRO 0
+// MODE_SERIAL = MODE_SERIAL_USB | MODE_SERIAL_ETHERNET | MODE_SERIAL_LCD | MODE_SERIAL_ALL
+#define MODE_SERIAL             MODE_SERIAL_USB + MODE_SERIAL_ETHERNET
+
+// MODE_VERBOSE = MODE_VERBOSE_NONE | MODE_VERBOSE_HELP | MODE_VERBOSE_LIST | MODE_VERBOSE_WEBAPP | MODE_VERBOSE_ALL
+#define MODE_VERBOSE            MODE_VERBOSE_ALL
+
+// PIN_VISIBILITY_DEFAULT = PIN_VISIBILITY_HIDDEN | PIN_VISIBILITY_VISIBLE
+#define PIN_VISIBILITY_DEFAULT  PIN_VISIBILITY_VISIBLE
+
+
 
 // a number between 1 and 254
-#define DEVICE_NUMBER       12
-#define DEVICE_NAME_PREFIX  "WSlave_"
+// =====================
+#define DEVICE_NUMBER   12
+// =====================
+
 
 // USB conf
+// =====================
 #define USB_SPEED       115200
+// =====================
+
 
 // ETH conf
+// =====================
 #define DHCP_TIMEOUT_MS 3000
-//#define IP              10,240,170, DEVICE_NUMBER
-//#define SUBNET          255,255,255,0
-//#define GATEWAY         0,0,0,0
-//#define DNS             0,0,0,0
-// ascii code for "@lan#" + HEX 12
-//#define MAC             MAC_ADDRESS( DEVICE_NUMBER )
 #define WEB_PORT        80
-#define ETH_BLPIN       53 /* power of W5100 chip */
+// =====================
+
+
+// LCD conf
+// =====================
+#define LCD_WIDTH       16
+#define LCD_HEIGHT      2
+#define LCD_PIN_BL      11  /* backlight /!\ Pin10: CONFLICT on W5100 Ethernet Shield */
+#define LCD_PIN_RS      8
+#define LCD_PIN_ENABLE  9
+#define LCD_PIN_D4      4
+#define LCD_PIN_D5      5
+#define LCD_PIN_D6      6
+#define LCD_PIN_D7      7
+#define LCD_PINS        LCD_PIN_RS, LCD_PIN_ENABLE, LCD_PIN_D4, LCD_PIN_D5, LCD_PIN_D6, LCD_PIN_D7
+#define LCD_PIN_ABTN    analogInputToDigitalPin(0)   /* analog pin of buttons */
+// =====================
+
 
 #endif // config_H_

@@ -29,7 +29,7 @@ input{
         _.split('\n').forEach(_=>{
             if(_){
                 x=_.split(' ');
-                document.body.innerHTML+=`<p>${x[0]} <input id=${x[0]} type=range min=0 max=255 onchange="f('${x[1][0]=='I'?'GET':'PUT'}','/${x[0].substr(1)}/'+this.value,u)">`;
+                document.body.innerHTML+=`<p>${x[0]} <input id=${x[0]} type=range min=0 max=255 onchange="f('GET','/${x[1][0]=='I'?'r':'w'}/${x[0].substr(1)}/'+this.value,u)">`;
                 u(_)
             }
         })

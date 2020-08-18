@@ -40,7 +40,7 @@ InterfaceLcd1602::InterfaceLcd1602(LiquidCrystal* lcd)
 
 void InterfaceLcd1602::begin()
 {
-    this->_state = SHUTDOWN;
+    this->_state = IDLE;
     this->_key = KEYPAD_NONE;
     this->_tmpKey = KEYPAD_NONE;
 
@@ -206,45 +206,40 @@ void InterfaceLcd1602::_next()
 
 void InterfaceLcd1602::_switchValue()
 {
-    const uint8_t mode = Core::getPinMode(this->_pin);
-
-    if (OUTPUT == mode) {
-        Core::set(this->_pin, Core::get(this->_pin) < 128 ? HIGH : LOW);
-    }
+    Core::set(this->_pin, Core::get(this->_pin) < 128 ? 255 : 0);
 }
 
 
 void InterfaceLcd1602::_changeValue(const int8_t delta)
 {
-    const uint8_t mode = Core::getPinMode(this->_pin);
-
-    if (OUTPUT == mode) {
-        Core::set(this->_pin, Core::get(this->_pin) + delta);
-    }
+    const uint8_t value = constrain(Core::get(this->_pin) + delta, 0, 255);
+    Core::set(this->_pin, value);
 }
 
 
 void InterfaceLcd1602::_updateBacklight()
 {
     switch (this->_state) {
-        case SLEEPING:
-            #ifdef LCD_PIN_BL
-            analogWrite(LCD_PIN_BL, LCD_BACKLIGHT_SLEEP);
-            #endif
-            break;
         case AWAKE:
             this->_lcd->display();
             #ifdef LCD_PIN_BL
-            analogWrite(LCD_PIN_BL, HIGH);
+            analogWrite(LCD_PIN_BL, LCD_BACKLIGHT_ON);
             #endif
             break;
         case IDLE:
             break;
+        case SHUTDOWN:
+            #ifdef LCD_PIN_BL
+            analogWrite(LCD_PIN_BL, LCD_BACKLIGHT_OFF);
+            #endif
+            this->_lcd->noDisplay();
+            break;
+        case SLEEPING:
         default:
             #ifdef LCD_PIN_BL
-            analogWrite(LCD_PIN_BL, LOW);
+            analogWrite(LCD_PIN_BL, LCD_BACKLIGHT_SLEEP);
             #endif
-            this->_lcd->display();
+            break;
     }
 }
 
@@ -270,7 +265,7 @@ void InterfaceLcd1602::_printProgressBar(const uint8_t size, const uint8_t value
         } else {
             this->_lcd->write(DISPLAY_PB_VOID);
         }
-        
+
         progress+= step;
     }
 }
@@ -283,12 +278,12 @@ const boolean InterfaceLcd1602::_hasNewPulsedKey()
     if (this->_key != currentKey) {
         if (this->_tmpKey != currentKey) {
             this->_tmpKey = currentKey;
-            
+
             return true;
         }
-    }
 
-    this->_key = currentKey;
+        this->_key = currentKey;
+    }
 
     return false;
 }

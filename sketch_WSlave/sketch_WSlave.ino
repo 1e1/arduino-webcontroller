@@ -56,7 +56,6 @@ static AbstractInterface* _engines[MODE_SERIAL_COUNT(MODE_SERIAL)];
 
 void setup()
 {
-  BUSYLED_HIGH;
   DEBUG_START();
   LOGLN(F("DEBUG ON"));
 
@@ -88,7 +87,7 @@ void setup()
   _engines[i]->begin();
   #endif
 
-  BUSYLED_NONE;
+  LOGLN(F("CONFIGURED"));
 }
 
 
@@ -100,7 +99,6 @@ void loop()
 
   while (i-->0) {
     if (isTick) {
-      BUSYLED_WORK;
       // broadcast
       _engines[i]->raise();
 
@@ -110,10 +108,7 @@ void loop()
       }
     }
 
-    BUSYLED_IDLE;
     _engines[i]->loop();
-
-    BUSYLED_NONE;
   }
 }
 

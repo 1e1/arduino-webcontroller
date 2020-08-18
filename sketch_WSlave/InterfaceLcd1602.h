@@ -48,7 +48,9 @@
 #define LCDCHAR(ch) static const uint8_t ch[] PROGMEM
 
 // LCD conf
-#define LCD_BACKLIGHT_SLEEP 31
+#define LCD_BACKLIGHT_ON    128
+#define LCD_BACKLIGHT_SLEEP 240
+#define LCD_BACKLIGHT_OFF   255
 #define LCDPAD_LATENCY1_MS  10    // detect press down
 #define LCDPAD_LATENCYX_MS  500   // switch mode from ONCE to MULTI
 #define LCDPAD_SPEED_MS     200   // considering new press down
@@ -85,7 +87,7 @@ class InterfaceLcd1602 : public AbstractInterface {
   void raise();
   void reset();
 
-  typedef enum { SHUTDOWN, SLEEPING, IDLE, AWAKE } State;
+  typedef enum { SHUTDOWN=0, SLEEPING, IDLE, AWAKE } State;
   typedef enum { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT } Key;
 
   protected:

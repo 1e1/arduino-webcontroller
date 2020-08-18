@@ -13,28 +13,28 @@ Edit `./sketch_WSlave/config.h`
 ## Commands
 
 Standard REST routes:
-- $: `/$`
+- **$**: `/$`
   full status list of all pins if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
-- r: `/r/{pin_id}`
+- **r**ead: `/r/{pin_id}`
   view a pin
 
-- w: `/w/{pin_id}/{value}`
+- **w**rite: `/w/{pin_id}/{value}`
   set a value (0-255) to this pin
   (set a pin to OUTPUT mode)
   On digital: false=0-127; true-128-255
 
-- i: `/i/{pin_id}`
+- **i**nput: `/i/{pin_id}`
   set a pin to INPUT mode
 
-- o: `/o/{pin_id}`
+- **o**utput: `/o/{pin_id}`
   set a pin to OUTPUT mode
 
 Extended routes:
-- h: `/h/{pin_id}`
+- **h**ide: `/h/{pin_id}`
   hide a pin in the full status list if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
-- s: `/s/{pin_id}`
+- **s**how: `/s/{pin_id}`
   show a pin in the full status list if `#define MODE_VERBOSE MODE_VERBOSE_LIST` (or `MODE_VERBOSE_ALL` by default)
 
   NB: use it to customize the webApp.

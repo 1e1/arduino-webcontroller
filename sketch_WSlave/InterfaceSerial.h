@@ -4,22 +4,18 @@
 #include <Arduino.h>
 #include "config.h"
 #include "macro.h"
-#include "AbstractInterface.h"
+#include "AbstractStream.h"
 #include "Core.h"
 
 
 
-class InterfaceSerial : public AbstractInterface {
+class InterfaceSerial : public AbstractStream {
 
   public:
   void begin(); // call it in setup()
-  void check(); // call it once in the main loop()
-  void work();
-  void idle();
-  void clean();
-
-  protected:
-  Stream* _stream;
+  void loop();  // call it once in the main loop()
+  void raise();
+  void reset();
 
 };
 

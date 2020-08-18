@@ -28,31 +28,17 @@
  * */
 bool AbstractStream::read()
 {
-    this->_currentAction = this->_currentStream->read();
-    this->_currentPin = PIN_NONE;
-
     if (this->_findUntil(PATH_SEPARATOR, BUFFER_SIZE)) {
-        #if MODE_VERBOSE & MODE_VERBOSE_LIST
-        const char nextChar = this->_currentStream->peek();
+        this->_currentAction = this->_currentStream->read();
 
-        if (CMD_ALL == nextChar) {
-            this->_currentAction = ACTION_ALL;
+        // jump next separator
+        this->_currentStream->read();
 
-            return true;
-        }
-
-        if ('0' <= nextChar && nextChar <= '9') {
-            this->_currentPin = this->_currentStream->parseInt(SKIP_NONE);
-
-            return true;
-        }
-        
-        #else
         this->_currentPin = this->_currentStream->parseInt(SKIP_NONE);
 
         return true;
-        #endif
     }
+
 
     return false;
 }
@@ -63,37 +49,38 @@ void AbstractStream::process()
 {
     switch (this->_currentAction) {
 
-    case ACTION_GET:
-        break;
+        #if MODE_VERBOSE & MODE_VERBOSE_LIST
+        case ACTION_ALL:
+            this->_showAll();
+            return;
+        #endif
 
-    #if MODE_VERBOSE & MODE_VERBOSE_LIST
-    case ACTION_ALL:
-        this->_showAll();
-        return;
-    #endif
+        case ACTION_INPUT:
+            Core::set(this->_currentPin, LOW);
+            break;
 
-    case ACTION_DELETE:
-        Core::unset(this->_currentPin);
-        break;
+        case ACTION_OUTPUT:
+            Core::unset(this->_currentPin);
+            break;
+        
+        #if MODE_VERBOSE & MODE_VERBOSE_LIST
+        case ACTION_HIDE:
+        case ACTION_SHOW:
+            Core::isPinVisible(this->_currentPin, this->_currentAction == ACTION_SHOW);
+            break;
+        #endif
 
-    case ACTION_PUT:
-        {
-            const char nextChar = this->_currentStream->read(); // jump the separator
+        case ACTION_WRITE:
+            {
+                // jump the separator
+                this->_currentStream->read();
 
-            #if MODE_VERBOSE & MODE_VERBOSE_LIST
-            if (PATH_SEPARATOR == nextChar) {
                 const uint8_t value = this->_currentStream->parseInt(SKIP_NONE);
                 Core::set(this->_currentPin, value);
-            } else {
-                Core::isPinVisible(this->_currentPin, CMD_HIDE != nextChar);
             }
-        
-            #else
-            const uint8_t value = this->_currentStream->parseInt(SKIP_NONE);
-            Core::set(this->_currentPin, value);
-            #endif
-        }
-        break;
+            break;
+
+        case ACTION_READ:;
     }
 
     this->_showOne(this->_currentPin);
@@ -125,13 +112,14 @@ void AbstractStream::_showOne(const uint8_t pin)
     this->_currentStream->print(pin);
 
     const uint8_t mode = Core::getPinMode(pin);
-    const int value = Core::get(pin, mode, isAnalog || isPwm);
 
     if (OUTPUT == mode) {
         this->_currentStream->print(TEXT_OUTPUT);
     } else {
         this->_currentStream->print(TEXT_INPUT);
     }
+    
+    const int value = Core::get(pin);
 
     this->_currentStream->println(value);
 }

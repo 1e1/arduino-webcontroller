@@ -12,16 +12,17 @@
 
 
 
-#define ACTION_ALL          '*'
-#define ACTION_GET          'G'
-#define ACTION_PUT          'P'
-#define ACTION_DELETE       'D'
+#define ACTION_ALL          '$'
+#define ACTION_READ         'r'
+#define ACTION_WRITE        'w'
+#define ACTION_INPUT        'i'
+#define ACTION_OUTPUT       'o'
+#define ACTION_HIDE         'h'
+#define ACTION_SHOW         's'
 #define PATH_SEPARATOR      '/'
 #define LF                  '\n'
 #define TEXT_INPUT          F(" IN ")
 #define TEXT_OUTPUT         F(" OUT ")
-#define CMD_HIDE            '.'
-#define CMD_ALL             '$'
 #define PREFIX_DIGITAL_PIN  'D'
 #define PREFIX_PWM_PIN      'P'
 #define PREFIX_ANALOG_PIN   'A'

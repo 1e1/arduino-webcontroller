@@ -23,18 +23,13 @@
 
 
 /**
- * ACTION /(<pin>\d+(/<value>\d+)?)? (...)
- * ACTION ::= G(ET) | P(UT) | D(ELETE)
+ * (...) /<action>\\w /(<pin>\d+( /<value>\d+)?)? (...)
  * */
 bool AbstractStream::read()
 {
     if (this->_findUntil(PATH_SEPARATOR, BUFFER_SIZE)) {
         this->_currentAction = this->_currentStream->read();
-
-        // jump next separator
-        this->_currentStream->read();
-
-        this->_currentPin = this->_currentStream->parseInt(SKIP_NONE);
+        this->_currentPin = this->_currentStream->parseInt(SKIP_ALL);
 
         return true;
     }
@@ -71,13 +66,7 @@ void AbstractStream::process()
         #endif
 
         case ACTION_WRITE:
-            {
-                // jump the separator
-                this->_currentStream->read();
-
-                const uint8_t value = this->_currentStream->parseInt(SKIP_NONE);
-                Core::set(this->_currentPin, value);
-            }
+            Core::set(this->_currentPin, this->_currentStream->parseInt(SKIP_ALL));
             break;
 
         case ACTION_READ:;

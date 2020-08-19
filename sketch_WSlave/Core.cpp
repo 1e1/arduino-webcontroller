@@ -11,7 +11,7 @@
 
 
 uint8_t Core::_outputValues[NUM_DIGITAL_PINS-NUM_ANALOG_INPUTS];
-volatile Core::option Core::_options[NUM_DIGITAL_PINS];
+Core::option Core::_options[NUM_DIGITAL_PINS];
 
 
 

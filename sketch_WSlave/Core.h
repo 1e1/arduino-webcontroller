@@ -27,12 +27,12 @@ class Core {
 
   protected:
   struct option {
-    option(): isVisible(true) {};
-    bool isVisible : PIN_VISIBILITY_DEFAULT;
+    option(): isVisible(PIN_VISIBILITY_DEFAULT) {};
+    bool isVisible : 1;
   };
 
   static uint8_t _outputValues[NUM_DIGITAL_PINS-NUM_ANALOG_INPUTS];
-  static volatile option _options[NUM_DIGITAL_PINS];
+  static option _options[NUM_DIGITAL_PINS];
 
 };
 

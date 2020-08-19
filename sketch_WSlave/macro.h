@@ -18,7 +18,7 @@
 
 
 /** HELP **/
-#define TEXT_HELP F("** HELP\n** ^(G|P|D) /(<pin>\\d+(/<value>\\d+)?)?\n")
+#define TEXT_HELP F("** HELP\n** /<action>\\w/(<pin>\\d+(/<value>\\d+)?)?\n")
 
 
 #define DEBUG 0

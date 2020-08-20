@@ -70,10 +70,14 @@ void setup()
   #endif
 
   #if MODE_SERIAL & MODE_SERIAL_ETHERNET
+  #if TYPE_MAC & TYPE_MAC_RANDOM
   randomSeed(analogRead(0));
 
   const uint8_t deviceNumber = random(2, 253);
   byte mac[] = MAC_ADDRESS(deviceNumber);
+  #else
+  byte mac[] = MAC_ADDRESS(DEVICE_NUMBER);
+  #endif
 
   Ethernet.begin(mac, DHCP_TIMEOUT_MS);
   LOGLN(Ethernet.localIP());

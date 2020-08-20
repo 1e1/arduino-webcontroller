@@ -14,9 +14,12 @@
 // PIN_VISIBILITY_DEFAULT = PIN_VISIBILITY_HIDDEN | PIN_VISIBILITY_VISIBLE
 #define PIN_VISIBILITY_DEFAULT  PIN_VISIBILITY_VISIBLE
 
+// TYPE_MAC = TYPE_MAC_STATIC |TYPE_MAC_RANDOM
+#define TYPE_MAC                TYPE_MAC_RANDOM
 
 
-// a number between 1 and 254
+
+// a number between 2 and 253
 // =====================
 #define DEVICE_NUMBER   12
 // =====================
@@ -24,7 +27,7 @@
 
 // USB conf
 // =====================
-#define USB_SPEED       115200
+#define USB_SPEED       9600
 // =====================
 
 
